@@ -71,11 +71,11 @@ def train(env, nb_epochs, nb_epoch_cycles, render_eval, reward_scale, render, pa
                 for t_rollout in range(nb_rollout_steps):
                     # Predict next action.
                     action, q = agent.pi(obs, apply_noise=True, compute_Q=True)
+                    print(action.mean(), action.std(), q.mean(), q.std())
+
                     assert action.shape == env.action_space.shape
 
                     # Execute next action.
-                    if rank == 0 and render:
-                        env.render()
                     assert max_action.shape == action.shape
                     new_obs, r, done, info = env.step(max_action * action)  # scale for execution in env (as far as DDPG is concerned, every action is in [-1, 1])
                     t += 1

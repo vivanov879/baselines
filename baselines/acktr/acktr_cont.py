@@ -1,10 +1,11 @@
 import numpy as np
 import tensorflow as tf
+from baselines.acktr.filters import ZFilter
+
 from baselines import logger
 import baselines.common as common
 from baselines.common import tf_util as U
 from baselines.acktr import kfac
-from baselines.common.filters import ZFilter
 
 def pathlength(path):
     return path["reward"].shape[0]# Loss function that we'll differentiate to get the policy gradient
@@ -105,6 +106,8 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
             advs.append(adv_t)
         # Update value function
         vf.fit(paths, vtargs)
+        print('=================')
+        print(np.mean(vtargs))
 
         # Build arrays for policy update
         ob_no = np.concatenate([path["observation"] for path in paths])
