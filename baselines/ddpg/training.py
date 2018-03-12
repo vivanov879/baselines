@@ -71,6 +71,8 @@ def train(env, nb_epochs, nb_epoch_cycles, render_eval, reward_scale, render, pa
                 for t_rollout in range(nb_rollout_steps):
                     # Predict next action.
                     action, q = agent.pi(obs, apply_noise=True, compute_Q=True)
+                    action = (np.random.rand(action.shape[0])-0.5)*2
+
                     print(action.mean(), action.std(), q.mean(), q.std())
 
                     assert action.shape == env.action_space.shape
