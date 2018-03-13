@@ -73,8 +73,6 @@ def train(env, nb_epochs, nb_epoch_cycles, render_eval, reward_scale, render, pa
                     action, q = agent.pi(obs, apply_noise=True, compute_Q=True)
                     action = (np.random.rand(action.shape[0])-0.5)*2
 
-                    print(action.mean(), action.std(), q.mean(), q.std())
-
                     assert action.shape == env.action_space.shape
 
                     # Execute next action.
@@ -119,6 +117,12 @@ def train(env, nb_epochs, nb_epoch_cycles, render_eval, reward_scale, render, pa
                     epoch_critic_losses.append(cl)
                     epoch_actor_losses.append(al)
                     agent.update_target_net()
+
+                print(88888888888888)
+                print(np.mean(obs))
+                print(np.shape(obs))
+                print(np.mean(epoch_critic_losses))
+                print(np.mean(epoch_actor_losses))
 
                 # Evaluate.
                 eval_episode_rewards = []
