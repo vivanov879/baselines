@@ -71,7 +71,6 @@ def train(env, nb_epochs, nb_epoch_cycles, render_eval, reward_scale, render, pa
                 for t_rollout in range(nb_rollout_steps):
                     # Predict next action.
                     action, q = agent.pi(obs, apply_noise=True, compute_Q=True)
-                    action = (np.random.rand(action.shape[0])-0.5)*2
 
                     assert action.shape == env.action_space.shape
 
@@ -100,7 +99,7 @@ def train(env, nb_epochs, nb_epoch_cycles, render_eval, reward_scale, render, pa
                         epoch_episodes += 1
                         episodes += 1
 
-                        agent.reset()
+                        #agent.reset()
                         obs = env.reset()
 
                 # Train.
@@ -118,11 +117,12 @@ def train(env, nb_epochs, nb_epoch_cycles, render_eval, reward_scale, render, pa
                     epoch_actor_losses.append(al)
                     agent.update_target_net()
 
-                print(88888888888888)
+                print('-------------------------------')
                 print(np.mean(obs))
                 print(np.shape(obs))
                 print(np.mean(epoch_critic_losses))
                 print(np.mean(epoch_actor_losses))
+                print(np.mean(epoch_adaptive_distances))
 
                 # Evaluate.
                 eval_episode_rewards = []

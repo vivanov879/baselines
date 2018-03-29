@@ -310,14 +310,27 @@ class DDPG(object):
             })
 
         # Get all gradients and perform a synced update.
-        ops = [self.actor_grads, self.actor_loss, self.critic_grads, self.critic_loss]
-        actor_grads, actor_loss, critic_grads, critic_loss = self.sess.run(ops, feed_dict={
+        ops = [self.actor_grads, self.actor_loss, self.critic_grads, self.critic_loss, self.normalized_critic_tf]
+        actor_grads, actor_loss, critic_grads, critic_loss, normalized_ciritic_tf = self.sess.run(ops, feed_dict={
             self.obs0: batch['obs0'],
             self.actions: batch['actions'],
             self.critic_target: target_Q,
         })
         self.actor_optimizer.update(actor_grads, stepsize=self.actor_lr)
         self.critic_optimizer.update(critic_grads, stepsize=self.critic_lr)
+
+        if np.random.rand() < 0.02:
+            print('==================================')
+            print(np.linalg.norm(actor_grads))
+            print(np.linalg.norm(critic_grads))
+            print(np.mean(target_Q))
+            print(np.mean(normalized_ciritic_tf))
+            print(np.mean(batch['rewards']))
+            print('++++++++++++++++++++++++++++++++++')
+            print(np.linalg.norm(target_Q))
+            print(np.linalg.norm(normalized_ciritic_tf))
+            print(np.linalg.norm(batch['rewards']))
+
 
         return critic_loss, actor_loss
 
